@@ -11,10 +11,10 @@
 #import <STTwitter.h>
 #import "PBTweetObject.h"
 
-#define CONSUMER_KEY @"qxRIrj41XkJxENzJB0PICQ"
-#define CONSUMER_SECRET @"CMATUbPniUuVEPnm4yeno4NYrkQYeucoiHllu6E8Gk"
-#define AUTH_TOKEN @"42272508-qTWCRcD2t0JHjcSfjbJXmpZEEV3whvO9eKwQHzM6t"
-#define AUTH_SECRET @"553Xf4BFyhxvbTt1SSJcVpVcAPNR9dGjgyDbDC0U7hDOI"
+#define CONSUMER_KEY @"Your Consumer key"
+#define CONSUMER_SECRET @"Consumer Secret"
+#define AUTH_TOKEN @"Auth token"
+#define AUTH_SECRET @"Auth Secret"
 
 @interface PBViewController (){
     id stream;
