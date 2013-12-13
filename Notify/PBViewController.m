@@ -11,10 +11,10 @@
 #import <STTwitter.h>
 #import "PBTweetObject.h"
 
-#define CONSUMER_KEY @"Your Consumer key"
-#define CONSUMER_SECRET @"Consumer Secret"
-#define AUTH_TOKEN @"Auth token"
-#define AUTH_SECRET @"Auth Secret"
+#define CONSUMER_KEY @"qxRIrj41XkJxENzJB0PICQ"
+#define CONSUMER_SECRET @"CMATUbPniUuVEPnm4yeno4NYrkQYeucoiHllu6E8Gk"
+#define AUTH_TOKEN @"42272508-4eCIMcK6blObykW7VCOeHqmKWeuhkf4UdGq7qTA3w"
+#define AUTH_SECRET @"gIYZCzF0eNyjg9Pw4lDfhIzTCjV8gSK81OvNxAfR7VeKV"
 
 @interface PBViewController (){
     id stream;
@@ -32,6 +32,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
     self.tweetTableView.dataSource = self;
     self.tweetTableView.delegate = self;
     self.tweets = [[NSMutableArray alloc] init];
@@ -40,7 +41,6 @@
     [self.rfduino setDelegate:self];
     self.manager = [RFduinoManager sharedRFduinoManager];
     [self.manager setDelegate:self];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,9 +55,11 @@
         self.tweetsLabel.text = @"Revieving Tweets";
         id request = [_twitterConnection getUserStreamDelimited:[NSNumber numberWithBool:false] stallWarnings:[NSNumber numberWithBool:false]includeMessagesFromFollowedAccounts:nil includeReplies:[NSNumber numberWithBool:false] keywordsToTrack:nil locationBoundingBoxes:nil progressBlock:^(id response) {
             PBTweetObject * tweet = [PBTweetObject tweetFromJSON:(NSDictionary *)response];
-            [self.tweets insertObject:tweet atIndex:0];
-            [self.tweetTableView reloadData];
-            [self sendDataToRFduino:1];
+            if(tweet.tweet!=nil){
+                [self.tweets insertObject:tweet atIndex:0];
+                [self.tweetTableView reloadData];
+                if(self.rfduinoConnected)[self sendDataToRFduino:1];
+            }
         } stallWarningBlock:^(NSString *code, NSString *message, NSUInteger percentFull) {
             NSLog(@"%@",message);
         } errorBlock:^(NSError *error) {
@@ -81,9 +83,10 @@
 }
 
 - (IBAction)connectToRFduinoPressed:(id)sender {
-    [self.manager connectRFduino:self.rfduino];
-    self.rfDuinoLabel.text = [NSString stringWithFormat:@"Connected to %@",self.rfduino.name];
-    
+    if(!self.rfduinoConnected)
+        [self.manager connectRFduino:self.rfduino];
+    else
+        [self.manager disconnectRFduino:self.rfduino];
 }
 
 - (IBAction)stopStreamPressed:(id)sender {
@@ -99,6 +102,15 @@
 
 -(void)didConnectRFduino:(RFduino *)rfduino{
     NSLog(@"CONNECTED to %@",rfduino.name);
+    self.rfDuinoLabel.text = [NSString stringWithFormat:@"Connected to %@:",self.rfduino.name];
+    self.rfduinoConnectButton.titleLabel.text = @"Disconnect";
+    self.rfduinoConnected = true;
+}
+
+-(void)didDisconnectRFduino:(RFduino *)rfduino{
+    self.rfDuinoLabel.text = [NSString stringWithFormat:@"RFduino Not Connected:"];
+    self.rfduinoConnectButton.titleLabel.text = @"Connect";
+    self.rfduinoConnected = false;
 }
 
 -(void)sendDataToRFduino:(uint8_t)message{

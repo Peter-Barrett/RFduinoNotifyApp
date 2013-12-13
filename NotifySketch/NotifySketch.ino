@@ -27,22 +27,24 @@ void loop() {
 void RFduinoBLE_onDisconnect()
 {
   // don't leave the led on if they disconnect
-  digitalWrite(led, LOW);
+  digitalWrite(led3, HIGH);
+  delay(1000);
+  digitalWrite(led3, LOW);
 }
 void RFduinoBLE_onConnect(){
   //flash sequence
   digitalWrite(led3, HIGH);
-  delay(500);  
+  delay(100);  
   digitalWrite(led3, LOW);
   digitalWrite(led2, HIGH);
-  delay(50);
+  delay(100);
   digitalWrite(led2, LOW);
-  delay(50);
+  delay(100);
   digitalWrite(led3, HIGH);
-  delay(50);  
+  delay(100);  
   digitalWrite(led3, LOW);
   digitalWrite(led2, HIGH);
-  delay(50);
+  delay(100);
   digitalWrite(led2, LOW);
 }  
   
@@ -52,5 +54,4 @@ void RFduinoBLE_onReceive(char *data, int len)
   digitalWrite(led, HIGH);   
   delay(1000);              
   digitalWrite(led, LOW);    
-  delay(1000); 
 }

@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *rfduinoProximityLabel;
 @property (strong, nonatomic) IBOutlet UILabel *rfDuinoLabel;
 @property (strong, nonatomic) IBOutlet UIButton *twitterButton;
+@property (strong, nonatomic) IBOutlet UIButton *rfduinoConnectButton;
 @property (strong, nonatomic) IBOutlet UILabel *tweetsLabel;
 - (IBAction)twitterButtonPressed:(id)sender;
 - (IBAction)connectToRFduinoPressed:(id)sender;
